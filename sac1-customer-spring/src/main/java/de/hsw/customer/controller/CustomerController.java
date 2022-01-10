@@ -34,27 +34,27 @@ public class CustomerController {
         this.service = service;
     }
 
-    // Powershell: invoke-restmethod -Method GET -Uri http://localhost:8081/api/customer/1
-    @GetMapping(path = "/api/customer/{id}")
+    // Powershell: invoke-restmethod -Method GET -Uri http://localhost:8081/api/customer/customer/1
+    @GetMapping(path = "/api/customer/customer/{id}")
     public Optional<CustomerResponse> getCustomer(@PathVariable long id) {
         return CustomerResponse.ofCustomer(service.get(id));
     }
 
     public boolean validateIban(String iban) {
         WebClient client = WebClient.create("http://localhost:7071");
-        IbanResponse response = client.get().uri("/api/ValidateIban?iban="+iban).retrieve().bodyToMono(IbanResponse.class).block();
+        IbanResponse response = client.get().uri("/api/iban/ValidateIban?iban="+iban).retrieve().bodyToMono(IbanResponse.class).block();
         return response.isValid();
     }
 
     public IbanResponse createIban(IbanRequest request) {
         WebClient client = WebClient.create("http://localhost:7071");
-        return client.post().uri("/api/CreateIban").bodyValue(request).retrieve().bodyToMono(IbanResponse.class).block();
+        return client.post().uri("/api/iban/CreateIban").bodyValue(request).retrieve().bodyToMono(IbanResponse.class).block();
     }
 
     // REST typischer HTTP 201 als 1. Alternative:
-    // Powershell: invoke-restmethod -Method POST -Uri http://localhost:8081/api/customer -Body "{`"name`":`"Hans Wurst`", `"address`":`"Musterstr. 123, 12345 Musterstadt`", `"iban`":`"DE75888888880000012345`"}" -ContentType "application/json"
-    // Powershell: invoke-restmethod -Method POST -Uri http://localhost:8081/api/customer -Body "{`"name`":`"Hans Wurst`", `"address`":`"Musterstr. 123, 12345 Musterstadt`", `"ibanRequest`":{`"countryCode`":`"DE`", `"accountNumber`":`"12345`", `"bankIdentification`":`"88888888`"}}" -ContentType "application/json"
-    @PostMapping(path = "/api/customer")
+    // Powershell: invoke-restmethod -Method POST -Uri http://localhost:8081/api/customer/customer -Body "{`"name`":`"Hans Wurst`", `"address`":`"Musterstr. 123, 12345 Musterstadt`", `"iban`":`"DE75888888880000012345`"}" -ContentType "application/json"
+    // Powershell: invoke-restmethod -Method POST -Uri http://localhost:8081/api/customer/customer -Body "{`"name`":`"Hans Wurst`", `"address`":`"Musterstr. 123, 12345 Musterstadt`", `"ibanRequest`":{`"countryCode`":`"DE`", `"accountNumber`":`"12345`", `"bankIdentification`":`"88888888`"}}" -ContentType "application/json"
+    @PostMapping(path = "/api/customer/customer")
     public ResponseEntity<?> create(@RequestBody CustomerRequest request) {
         System.out.println(request.toString());
         if(request.getIbanRequest() != null) {
@@ -71,9 +71,9 @@ public class CustomerController {
     }
 
     // Objekt zurückgeben als 2. Alternative
-    // Powershell: invoke-restmethod -Method POST -Uri http://localhost:8081/api/customer2 -Body "{`"name`":`"Hans Wurst`", `"address`":`"Musterstr. 123, 12345 Musterstadt`", `"iban`":`"DE75888888880000012345`"}" -ContentType "application/json"
-    // Powershell: invoke-restmethod -Method POST -Uri http://localhost:8081/api/customer2 -Body "{`"name`":`"Hans Wurst`", `"address`":`"Musterstr. 123, 12345 Musterstadt`", `"ibanRequest`":{`"countryCode`":`"DE`", `"accountNumber`":`"12345`", `"bankIdentification`":`"88888888`"}}" -ContentType "application/json"
-    @PostMapping(path = "/api/customer2")
+    // Powershell: invoke-restmethod -Method POST -Uri http://localhost:8081/api/customer/customer2 -Body "{`"name`":`"Hans Wurst`", `"address`":`"Musterstr. 123, 12345 Musterstadt`", `"iban`":`"DE75888888880000012345`"}" -ContentType "application/json"
+    // Powershell: invoke-restmethod -Method POST -Uri http://localhost:8081/api/customer/customer2 -Body "{`"name`":`"Hans Wurst`", `"address`":`"Musterstr. 123, 12345 Musterstadt`", `"ibanRequest`":{`"countryCode`":`"DE`", `"accountNumber`":`"12345`", `"bankIdentification`":`"88888888`"}}" -ContentType "application/json"
+    @PostMapping(path = "/api/customer/customer2")
     public ResponseEntity<?> createCustomer(@RequestBody CustomerRequest request) {
         if(request.getIbanRequest() != null) {
             request.setIban(createIban(request.getIbanRequest()).getIban());
@@ -88,8 +88,8 @@ public class CustomerController {
        
     }
 
-    // Powershell: invoke-restmethod -Method GET -Uri http://localhost:8081/api/customers
-    @GetMapping(path = "/api/customers")
+    // Powershell: invoke-restmethod -Method GET -Uri http://localhost:8081/api/customer/customers
+    @GetMapping(path = "/api/customer/customers")
     public List<CustomerResponse> getCustomers() {
         List<CustomerResponse> responses = new ArrayList<>();
         for(Customer c: service.getAllCustomers()) {

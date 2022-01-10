@@ -29,8 +29,8 @@ public class IbanController {
         this.service = service;
     }
 
-    // Powershell: invoke-restmethod -Method GET -Uri "http://localhost:7071/api/ValidateIban?iban=DE75888888880000012345"
-    @GetMapping(path = "/api/ValidateIban")
+    // Powershell: invoke-restmethod -Method GET -Uri "http://localhost:7071/api/iban/ValidateIban?iban=DE75888888880000012345"
+    @GetMapping(path = "/api/iban/ValidateIban")
     public ResponseEntity<IbanResponse> validateIban(@RequestParam String iban) {
         log.log(Level.INFO, "ValidateIban Request: " + iban);
         ResponseEntity<IbanResponse> responseEntity;
@@ -49,9 +49,9 @@ public class IbanController {
         return responseEntity;
     }
 
-    // Powershell: invoke-restmethod -Method POST -Uri "http://localhost:7071/api/CreateIban" -Body "{`"countryCode`":`"DE`", `"accountNumber`":`"12345`", `"bankIdentification`":`"88888888`"}" -ContentType "application/json"
+    // Powershell: invoke-restmethod -Method POST -Uri "http://localhost:7071/api/iban/CreateIban" -Body "{`"countryCode`":`"DE`", `"accountNumber`":`"12345`", `"bankIdentification`":`"88888888`"}" -ContentType "application/json"
     // @RequestBody wird im JSON Format erwartet und nicht x-www-form-urlencoded
-    @PostMapping(path = "/api/CreateIban")
+    @PostMapping(path = "/api/iban/CreateIban")
     public ResponseEntity<IbanResponse> createIban(@RequestBody IbanRequest request) {
         log.log(Level.INFO, "CreateIban POST: " + request);
         ResponseEntity<IbanResponse> responseEntity;
@@ -65,8 +65,8 @@ public class IbanController {
         return responseEntity;
     }
 
-    // Powershell: invoke-restmethod -Method GET -Uri "http://localhost:7071/api/CreateIban?countryCode=DE&accountNumber=12345&bankIdentification=88888888"
-   @GetMapping(path = "/api/CreateIban")
+    // Powershell: invoke-restmethod -Method GET -Uri "http://localhost:7071/api/iban/CreateIban?countryCode=DE&accountNumber=12345&bankIdentification=88888888"
+   @GetMapping(path = "/api/iban/CreateIban")
     public ResponseEntity<IbanResponse> createIbanGet(@RequestParam String countryCode, @RequestParam String accountNumber, @RequestParam String bankIdentification) {
         log.log(Level.INFO, "CreateIban GET: " + countryCode + "/"+bankIdentification+"/"+accountNumber);
         ResponseEntity<IbanResponse> responseEntity;

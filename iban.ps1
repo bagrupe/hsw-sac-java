@@ -15,7 +15,7 @@ function Read-Response {
 
 }
 
-$baseUrl = "http://localhost:7071/api"
+$baseUrl = "http://localhost:7071/api/iban"
 $validateUrl = "$($baseUrl)/ValidateIban"
 $createUrl = "$($baseUrl)/CreateIban"
 
